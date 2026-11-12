@@ -1,0 +1,30 @@
+# Dependecias
+node_modules/
+
+# Variables de ambiente
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Dados gerados pelos seeders
+data/*.json
+
+# Coverage e build output
+coverage/
+dist/
+build/
+
+# Editor e arquivos de configuração
+.vscode/*
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários
+tmp/
+temp/
