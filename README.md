@@ -11,7 +11,6 @@ O garçom abre a mesa e lança pedidos, a cozinha prepara, o caixa recebe o paga
 | `WAITER` (garçom) | Abre mesas, cria pedidos, vê pedidos prontos e marca como entregues |
 | `COOK` (cozinheiro) | Vê a fila e marca pedidos como preparando e prontos |
 | `CASHIER` (caixa) | Vê a conta da mesa e registra o pagamento |
-| `MANAGER` (gerente) | Cadastra funcionários, mesas e itens do cardápio; acessa todas as páginas |
 
 ## Arquitetura
 
