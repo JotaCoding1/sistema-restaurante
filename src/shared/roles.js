@@ -2,6 +2,5 @@
 export const ROLES = {
   WAITER: "WAITER",
   COOK: "COOK",
-  CASHIER: "CASHIER",
-  MANAGER: "MANAGER"
+  CASHIER: "CASHIER"
 };
