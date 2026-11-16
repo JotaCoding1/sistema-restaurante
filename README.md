@@ -59,7 +59,6 @@ Abra `http://localhost:3000` no navegador. Para desenvolver com recarga automát
 
 | Papel | E-mail | Senha |
 | --- | --- | --- |
-| Gerente | `gerente@restaurante.local` | `123456` |
 | Garçom | `garcom@restaurante.local` | `123456` |
 | Cozinheiro | `cozinha@restaurante.local` | `123456` |
 | Caixa | `caixa@restaurante.local` | `123456` |
