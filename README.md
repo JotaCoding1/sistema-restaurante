@@ -92,6 +92,12 @@ restaurante/
         *.routes.js  *.service.js  *.repository.js
 ```
 
+## Branches
+
+```text
+Foi criada a branch "development" para ser utilizada como a branch principal de desenvolvimento.
+```
+
 ## Problemas comuns
 
 | Sintoma | Causa provável | Solução |
