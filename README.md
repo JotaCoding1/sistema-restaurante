@@ -68,6 +68,54 @@ Para voltar aos dados iniciais, rode `npm run seed` de novo (ele apaga e recria 
 As rotas da API usam uma autenticação simples. Envie o e-mail do usuário no header `X-User-Email`. Todos os usuários usam a senha fixa
 `123456` no login.
 
+## API principal
+
+Todas as rotas abaixo, exceto `/api/login`, exigem o header `X-User-Email`.
+
+### Menu
+
+| Método | Rota | Permissão | Descrição |
+| --- | --- | --- | --- |
+| `GET` | `/api/menu` | autenticado | Lista os itens do cardápio |
+| `GET` | `/api/menu/:id` | autenticado | Consulta um item |
+| `POST` | `/api/menu` | `CASHIER` | Cria um item |
+
+O corpo da criação de um item deve conter `name` e `price`:
+
+```json
+{
+  "name": "Pizza Margherita",
+  "price": 42.9
+}
+```
+
+### Pedidos
+
+| Método | Rota | Permissão | Descrição |
+| --- | --- | --- | --- |
+| `GET` | `/api/orders` | autenticado | Lista pedidos; aceita `?status=PENDING` |
+| `GET` | `/api/orders/:id` | autenticado | Consulta um pedido |
+| `POST` | `/api/orders` | `WAITER` | Cria um pedido para uma mesa aberta |
+| `POST` | `/api/orders/:id/deliver` | `WAITER` | Marca um pedido pronto como entregue |
+
+Para criar um pedido, informe a mesa e os itens do cardápio:
+
+```json
+{
+  "tableId": 1,
+  "items": [
+    {
+      "itemId": 1,
+      "quantity": 2
+    }
+  ]
+}
+```
+
+Os pedidos seguem os status `PENDING`, `PREPARING`, `READY`, `DELIVERED` e
+`CANCELLED`. A cozinha altera os status de preparo pelas rotas do módulo
+`kitchen`; o garçom pode entregar somente pedidos com status `READY`.
+
 ## Scripts
 
 | Comando | O que faz |
