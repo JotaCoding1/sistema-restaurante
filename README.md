@@ -18,7 +18,7 @@ O back-end é um único processo Node.js dividido em módulos por domínio. Cada
 
 | Módulo | Responsabilidade | Depende de |
 | --- | --- | --- |
-| `identity` | Funcionários, login, papéis | nenhum |
+| `identity` | Funcionários, login simples, papéis | nenhum |
 | `tables` | Mesas e sessões de atendimento | nenhum |
 | `menu` | Cardápio e preços | nenhum |
 | `orders` | Pedidos | `tables`, `menu` |
@@ -65,6 +65,57 @@ Abra `http://localhost:3000` no navegador. Para desenvolver com recarga automát
 
 Para voltar aos dados iniciais, rode `npm run seed` de novo (ele apaga e recria a pasta `data/`).
 
+As rotas da API usam uma autenticação simples. Envie o e-mail do usuário no header `X-User-Email`. Todos os usuários usam a senha fixa
+`123456` no login.
+
+## API principal
+
+Todas as rotas abaixo, exceto `/api/login`, exigem o header `X-User-Email`.
+
+### Menu
+
+| Método | Rota | Permissão | Descrição |
+| --- | --- | --- | --- |
+| `GET` | `/api/menu` | autenticado | Lista os itens do cardápio |
+| `GET` | `/api/menu/:id` | autenticado | Consulta um item |
+| `POST` | `/api/menu` | `CASHIER` | Cria um item |
+
+O corpo da criação de um item deve conter `name` e `price`:
+
+```json
+{
+  "name": "Pizza Margherita",
+  "price": 42.9
+}
+```
+
+### Pedidos
+
+| Método | Rota | Permissão | Descrição |
+| --- | --- | --- | --- |
+| `GET` | `/api/orders` | autenticado | Lista pedidos; aceita `?status=PENDING` |
+| `GET` | `/api/orders/:id` | autenticado | Consulta um pedido |
+| `POST` | `/api/orders` | `WAITER` | Cria um pedido para uma mesa aberta |
+| `POST` | `/api/orders/:id/deliver` | `WAITER` | Marca um pedido pronto como entregue |
+
+Para criar um pedido, informe a mesa e os itens do cardápio:
+
+```json
+{
+  "tableId": 1,
+  "items": [
+    {
+      "itemId": 1,
+      "quantity": 2
+    }
+  ]
+}
+```
+
+Os pedidos seguem os status `PENDING`, `PREPARING`, `READY`, `DELIVERED` e
+`CANCELLED`. A cozinha altera os status de preparo pelas rotas do módulo
+`kitchen`; o garçom pode entregar somente pedidos com status `READY`.
+
 ## Scripts
 
 | Comando | O que faz |
@@ -102,5 +153,5 @@ Foi criada a branch "development" para ser utilizada como a branch principal de 
 | --- | --- | --- |
 | Erro ao iniciar com `--watch` ou módulo não encontrado | Node mais antigo que 20 ou falta de `npm install` | Atualizar o Node e rodar `npm install` |
 | Login não funciona | Seed não foi executado | `npm run seed` |
-| Tela pede login de novo | Servidor reiniciou (as sessões ficam em memória) | Entrar novamente |
+| API retorna 401 | O header `X-User-Email` não foi enviado ou não corresponde a um usuário | Enviar o e-mail de um usuário criado pelo seed |
 | Porta 3000 em uso | Outro processo na porta | Fechar o processo ou definir `PORT` |
