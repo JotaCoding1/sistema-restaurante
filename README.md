@@ -18,7 +18,7 @@ O back-end é um único processo Node.js dividido em módulos por domínio. Cada
 
 | Módulo | Responsabilidade | Depende de |
 | --- | --- | --- |
-| `identity` | Funcionários, login, papéis | nenhum |
+| `identity` | Funcionários, login simples, papéis | nenhum |
 | `tables` | Mesas e sessões de atendimento | nenhum |
 | `menu` | Cardápio e preços | nenhum |
 | `orders` | Pedidos | `tables`, `menu` |
@@ -59,12 +59,14 @@ Abra `http://localhost:3000` no navegador. Para desenvolver com recarga automát
 
 | Papel | E-mail | Senha |
 | --- | --- | --- |
-| Gerente | `gerente@restaurante.local` | `123456` |
 | Garçom | `garcom@restaurante.local` | `123456` |
 | Cozinheiro | `cozinha@restaurante.local` | `123456` |
 | Caixa | `caixa@restaurante.local` | `123456` |
 
 Para voltar aos dados iniciais, rode `npm run seed` de novo (ele apaga e recria a pasta `data/`).
+
+As rotas da API usam uma autenticação simples. Envie o e-mail do usuário no header `X-User-Email`. Todos os usuários usam a senha fixa
+`123456` no login.
 
 ## Scripts
 
@@ -103,5 +105,5 @@ Foi criada a branch "development" para ser utilizada como a branch principal de 
 | --- | --- | --- |
 | Erro ao iniciar com `--watch` ou módulo não encontrado | Node mais antigo que 20 ou falta de `npm install` | Atualizar o Node e rodar `npm install` |
 | Login não funciona | Seed não foi executado | `npm run seed` |
-| Tela pede login de novo | Servidor reiniciou (as sessões ficam em memória) | Entrar novamente |
+| API retorna 401 | O header `X-User-Email` não foi enviado ou não corresponde a um usuário | Enviar o e-mail de um usuário criado pelo seed |
 | Porta 3000 em uso | Outro processo na porta | Fechar o processo ou definir `PORT` |

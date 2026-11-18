@@ -10,12 +10,11 @@ import { createItem } from "./modules/menu/index.js";
 fs.rmSync(DATA_DIR, { recursive: true, force: true });
 
 const users = [
-  { name: "Gerente", email: "gerente@restaurante.local", role: ROLES.MANAGER },
   { name: "Garçom", email: "garcom@restaurante.local", role: ROLES.WAITER },
   { name: "Cozinheiro", email: "cozinha@restaurante.local", role: ROLES.COOK },
   { name: "Caixa", email: "caixa@restaurante.local", role: ROLES.CASHIER }
 ];
-for (const u of users) createUser({ ...u, password: "123456" });
+for (const u of users) createUser(u);
 
 for (let i = 1; i <= 6; i++) createTable({ name: `Mesa ${i}` });
 

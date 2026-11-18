@@ -7,7 +7,7 @@ import { menuRouter } from "./modules/menu/index.js";
 import { ordersRouter } from "./modules/orders/index.js";
 import { kitchenRouter } from "./modules/kitchen/index.js";
 import { paymentsRouter } from "./modules/payments/index.js";
-import { AppError, errorHandler } from "./shared/errors.js";
+import { AppError, errorHandler } from "./shared/erros.js";
 
 const app = express();
 app.use(express.json());
