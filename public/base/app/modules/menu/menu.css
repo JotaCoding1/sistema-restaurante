@@ -1,0 +1,34 @@
+/* menu.css — lista do cardápio e formulário de item */
+
+.menu-table { max-width: 900px; padding: 8px 32px 16px; }
+.menu-table-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0 14px;
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 15px;
+  color: var(--ink-3);
+}
+.menu-table ul { list-style: none; margin: 0; padding: 0; }
+.menu-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  border-bottom: 1px solid var(--line);
+  font-size: 20px;
+}
+.menu-line:last-child { border-bottom: 0; }
+.menu-line .money { color: var(--ink-2); }
+.menu-table .empty { margin: 20px 0; }
+
+.price-wrap .input { padding-left: 60px; padding-right: 22px; }
+.price-prefix {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  font-size: 18px;
+}

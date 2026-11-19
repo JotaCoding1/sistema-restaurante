@@ -12,8 +12,21 @@ import { AppError, errorHandler } from "./shared/erros.js";
 const app = express();
 app.use(express.json());
 
-// Front-end (pasta public/)
-app.use(express.static(fileURLToPath(new URL("../public/", import.meta.url))));
+// Permite abrir o front-end direto do arquivo ou por outro servidor de desenvolvimento
+app.use("/api", (req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Headers", "Content-Type, X-User-Email");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
+// Front-end: duas pastas servidas no mesmo endereço (ver README)
+//   public/base  — parte 1: shared, identity, tables, menu e login
+//   public/telas — parte 2: reservations, orders, kitchen, payments e telas dos perfis
+for (const dir of ["base", "telas"]) {
+  app.use(express.static(fileURLToPath(new URL(`../public/${dir}/`, import.meta.url))));
+}
 
 // API
 app.use("/api", identityRouter); 
