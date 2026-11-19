@@ -1,4 +1,4 @@
-import { AppError } from "../../shared/errors.js";
+import { AppError } from "../../shared/erros.js";
 import { now } from "../../shared/time.js";
 import { ORDER_STATUS, getOrder, listOrders, setOrderStatus } from "../orders/index.js";
 import { readTickets, writeTickets } from "./kitchen.repository.js";
