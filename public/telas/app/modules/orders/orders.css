@@ -1,0 +1,92 @@
+/* orders.css — cartão de pedido e modal de novo pedido */
+
+.order-stack { display: grid; gap: 14px; }
+
+.order-card { padding: 22px 22px 18px; border-radius: var(--radius); }
+.order-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+.order-card-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+
+.order-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 17px; }
+.order-items li, .cart-list li { display: flex; gap: 10px; align-items: baseline; }
+.qty { color: var(--ink-3); min-width: 30px; font-variant-numeric: tabular-nums; }
+.grow { flex: 1; }
+
+.order-card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 17px;
+}
+.order-card-foot strong { font-size: 19px; }
+.deliver { margin-top: 16px; }
+
+.running-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 18px 0 4px;
+  border-top: 1px solid var(--line-strong);
+  font-size: 18px;
+  color: var(--ink-2);
+}
+.running-total strong { font-size: 28px; font-weight: 500; color: var(--ink); letter-spacing: -0.02em; }
+
+/* ---------- Novo pedido ---------- */
+
+.order-builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.menu-pick { padding: 24px 32px 32px; display: grid; gap: 14px; align-content: start; }
+.menu-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+
+.menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 12px 12px 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.15s, background 0.15s;
+}
+.menu-row.is-picked { border-color: var(--brand); background: #fbfdfa; }
+.menu-row-info { display: grid; gap: 2px; }
+.menu-row-name { font-size: 18px; font-weight: 500; }
+
+.stepper { display: flex; align-items: center; gap: 12px; }
+.stepper-value { min-width: 24px; text-align: center; font-size: 20px; font-weight: 500; }
+
+.cart {
+  padding: 24px 32px 32px;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  border-bottom-right-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cart-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 17px; }
+.cart-empty { color: var(--ink-3); font-size: 16px; }
+.cart-total {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-strong);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 18px;
+}
+.cart-total strong { font-size: 30px; font-weight: 500; letter-spacing: -0.02em; }
+
+@media (max-width: 700px) {
+  .order-builder { grid-template-columns: 1fr; }
+  .cart { border-left: 0; border-top: 1px solid var(--line); border-radius: 0 0 22px 22px; }
+  .menu-pick, .cart { padding: 20px; }
+}

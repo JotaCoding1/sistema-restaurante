@@ -17,4 +17,5 @@ configureHttp({
 });
 
 export { ROLES, getUser, logout, homeFor, requireRole } from "./identity.session.js";
+export { login } from "./identity.auth.js";
 export { mountLoginView, mountUserTopbar } from "./identity.view.js";

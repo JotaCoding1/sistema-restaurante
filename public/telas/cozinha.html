@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cozinha · à mesa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600\&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app/shared/styles/base.css" />
+  <!-- módulos usados nesta página -->
+  <link rel="stylesheet" href="app/modules/kitchen/kitchen.css" />
+  <link rel="stylesheet" href="app/modules/menu/menu.css" />
+  <!-- composição da página -->
+  <link rel="stylesheet" href="app/pages/cozinha.css" />
+</head>
+<body>
+  <main class="page">
+    <header id="hero"></header>
+
+    <div class="tabs" role="tablist" aria-label="Seções da cozinha">
+      <button class="tab" role="tab" id="tabOrders" aria-selected="true" aria-controls="viewOrders"></button>
+      <button class="tab" role="tab" id="tabMenu" aria-selected="false" aria-controls="viewMenu"></button>
+    </div>
+
+    <section id="viewOrders" role="tabpanel" aria-labelledby="tabOrders">
+      <div id="board"></div>
+    </section>
+
+    <section id="viewMenu" role="tabpanel" aria-labelledby="tabMenu" hidden>
+      <div class="section-head">
+        <h2 class="section-title">Itens do cardápio <small id="menuCount"></small></h2>
+        <button class="btn btn--primary" type="button" id="addItem"></button>
+      </div>
+      <div id="menuTable"></div>
+    </section>
+  </main>
+
+  <script type="module" src="app/pages/cozinha.page.js"></script>
+</body>
+</html>

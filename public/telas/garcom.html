@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salão · à mesa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600\&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app/shared/styles/base.css" />
+  <!-- módulos usados nesta página -->
+  <link rel="stylesheet" href="app/modules/tables/tables.css" />
+  <link rel="stylesheet" href="app/modules/reservations/reservations.css" />
+  <link rel="stylesheet" href="app/modules/orders/orders.css" />
+  <!-- composição da página -->
+  <link rel="stylesheet" href="app/pages/salao.css" />
+</head>
+<body>
+  <main class="page">
+    <header id="hero"></header>
+
+    <section class="stats" id="stats" aria-label="Resumo do salão"></section>
+
+    <div class="waiter-layout">
+      <section aria-labelledby="tablesTitle">
+        <div class="section-head">
+          <h2 class="section-title" id="tablesTitle">Mesas do salão <small id="tablesCount"></small></h2>
+          <div class="segmented" role="group" aria-label="Filtrar mesas" id="filter">
+            <button type="button" data-filter="ALL" aria-pressed="true">Todas</button>
+            <button type="button" data-filter="FREE" aria-pressed="false">Livres</button>
+            <button type="button" data-filter="OCCUPIED" aria-pressed="false">Ocupadas</button>
+          </div>
+        </div>
+        <div class="table-grid" id="tableGrid"></div>
+      </section>
+
+      <aside class="side" id="side" aria-live="polite"></aside>
+    </div>
+  </main>
+
+  <script type="module" src="app/pages/salao.page.js"></script>
+</body>
+</html>

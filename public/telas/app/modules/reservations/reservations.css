@@ -1,0 +1,23 @@
+/* reservations.css — lista "Reservas do dia" e destaque de reserva */
+
+.reserva-list { list-style: none; margin: 16px 0 0; padding: 0; }
+.reserva { padding: 28px 0 32px; border-bottom: 1px solid var(--line-strong); display: grid; gap: 18px; }
+.reserva:first-child { padding-top: 12px; }
+.reserva.is-past { opacity: 0.45; }
+.reserva-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.reserva-time { display: inline-flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 500; letter-spacing: -0.02em; }
+.reserva-time .icon { width: 24px; height: 24px; }
+.reserva-name { font-size: 26px; letter-spacing: -0.015em; }
+.reserva-people { display: flex; align-items: center; gap: 10px; color: var(--ink-2); font-size: 19px; }
+
+.note {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  background: var(--busy-card);
+  border: 1px solid #eadcc3;
+}
+.note-icon { color: var(--busy); }
+.note-title { font-size: 19px; font-weight: 500; color: var(--busy); }

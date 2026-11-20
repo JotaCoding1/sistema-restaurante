@@ -15,7 +15,7 @@ export function brand() {
     </div>`;
 }
 
-// areas: [{ label, icon, active, hint }]
+// areas: [{ label, icon, active, hint, onSelect }]
 export function mountTopbar({ userName, roleLabel, areas = [], onLogout }) {
   const initials = userName.split(/\s+/).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
   const bar = document.createElement("header");
@@ -24,9 +24,9 @@ export function mountTopbar({ userName, roleLabel, areas = [], onLogout }) {
     ${brand()}
     <nav class="nav" aria-label="Áreas">
       ${areas.map((a) => `
-        <span class="nav-item ${a.active ? "is-active" : ""}" ${a.active ? 'aria-current="page"' : `title="${escape(a.hint ?? "")}"`}>
+        <button type="button" class="nav-item ${a.active ? "is-active" : ""}" aria-label="${escape(a.label)}" ${a.active ? 'aria-current="page"' : `title="${escape(a.hint ?? "")}"`}>
           ${icon(a.icon)}<span>${escape(a.label)}</span>
-        </span>`).join("")}
+        </button>`).join("")}
     </nav>
     <div class="topbar-spacer"></div>
     <div class="user">
@@ -38,7 +38,16 @@ export function mountTopbar({ userName, roleLabel, areas = [], onLogout }) {
       <button class="logout" type="button" aria-label="Sair">${icon("logout")}</button>
     </div>`;
   bar.querySelector(".logout").addEventListener("click", () => onLogout?.());
+  bar.querySelectorAll(".nav-item").forEach((button, index) => {
+    button.addEventListener("click", () => areas[index].onSelect?.());
+  });
   document.body.prepend(bar);
+  return {
+    setBusy(busy) {
+      bar.setAttribute("aria-busy", String(busy));
+      bar.querySelectorAll("button").forEach((button) => { button.disabled = busy; });
+    }
+  };
 }
 
 // Cabeçalho: área · serviço, frase, subtítulo, data e hora (atualiza sozinho)

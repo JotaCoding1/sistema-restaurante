@@ -1,0 +1,85 @@
+/* kitchen.css — quadro de preparo e comandas */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+
+.lane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+.lane-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.lane-head h2 .icon { width: 28px; height: 28px; }
+.lane-count {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.lane-body { display: grid; gap: 32px; }
+
+.ticket { padding: 40px; display: grid; gap: 28px; border-radius: var(--radius); }
+.ticket.is-sent { background: #fbfaf8; }
+.ticket.is-sent .ticket-table,
+.ticket.is-sent .ticket-items { color: var(--ink-2); }
+
+.ticket-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.ticket-table { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.ticket-order { margin-top: 12px; font-size: 19px; color: var(--ink-2); }
+.ticket-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 19px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.ticket-time.is-late { color: var(--danger); font-weight: 500; }
+
+.ticket-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; font-size: 21px; }
+.ticket-items li { display: flex; align-items: baseline; gap: 14px; }
+.ticket-qty { color: var(--ink-3); font-size: 19px; min-width: 28px; }
+
+.btn--ticket { min-height: 76px; font-size: 22px; margin-top: 8px; }
+.btn--ticket .icon { width: 26px; height: 26px; }
+
+.ticket-sent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line-strong);
+  color: var(--free);
+  font-size: 18px;
+}
+
+@media (max-width: 1380px) {
+  .board { gap: 20px; }
+  .ticket { padding: 28px; gap: 22px; }
+  .ticket-table { font-size: 26px; }
+  .ticket-items { font-size: 18px; gap: 12px; }
+  .btn--ticket { min-height: 60px; font-size: 18px; }
+  .lane-head { margin-bottom: 24px; }
+  .lane-body { gap: 20px; }
+}
+
+@media (max-width: 960px) {
+  .board { grid-template-columns: 1fr; gap: 40px; }
+}

@@ -2,29 +2,43 @@
 
 import { icon } from "../../shared/icons.js";
 import { brand, mountTopbar } from "../../shared/layout.js";
-import { ROLES, saveUser, homeFor, getUser, logout } from "./identity.session.js";
-import { requestLogin } from "./identity.api.js";
-
-const DEMO_PASSWORD = "123456";
-const DEMO_ACCOUNTS = [
-  { role: "WAITER",  email: "garcom@restaurante.local" },
-  { role: "COOK",    email: "cozinha@restaurante.local" },
-  { role: "CASHIER", email: "caixa@restaurante.local" }
-];
+import { toast } from "../../shared/dom.js";
+import { ROLES, homeFor, getUser, logout } from "./identity.session.js";
+import { login, DEMO_PASSWORD, DEMO_ACCOUNTS } from "./identity.auth.js";
 
 // Topo das telas internas: áreas do restaurante com a do papel ativa
 export function mountUserTopbar(user) {
-  mountTopbar({
+  let switching = false;
+  const topbar = mountTopbar({
     userName: user.name,
     roleLabel: ROLES[user.role]?.label ?? "",
     areas: Object.entries(ROLES).map(([key, r]) => ({
       label: r.area,
       icon: r.icon,
       active: key === user.role,
-      hint: `Disponível para o perfil ${r.label}`
+      hint: `Entrar na conta de demonstração de ${r.area}`,
+      onSelect: () => switchAccount(key)
     })),
     onLogout: logout
   });
+
+  async function switchAccount(role) {
+    if (switching || role === user.role) return;
+    const account = DEMO_ACCOUNTS.find((demo) => demo.role === role);
+    if (!account) return;
+
+    switching = true;
+    topbar.setBusy(true);
+    try {
+      const selected = await login(account.email, DEMO_PASSWORD);
+      window.location.href = homeFor(selected);
+      // Mantém os botões bloqueados até a nova página assumir a sessão.
+    } catch (err) {
+      switching = false;
+      topbar.setBusy(false);
+      toast(`Não foi possível trocar para ${ROLES[role].area}. ${err.message}`, "error");
+    }
+  }
 }
 
 // Tela de login completa dentro de `root`
@@ -113,13 +127,13 @@ export function mountLoginView(root) {
   };
 
   async function signIn() {
+    if (submit.disabled) return;
     error.hidden = true;
     if (!email.value.trim() || !password.value) return showError("Informe e-mail e senha.");
     submit.disabled = true;
     submit.querySelector("[data-label]").textContent = "Entrando…";
     try {
-      const user = await requestLogin(email.value.trim(), password.value);
-      saveUser(user);
+      const user = await login(email.value.trim(), password.value);
       window.location.href = homeFor(user);
     } catch (err) {
       showError(err.message);

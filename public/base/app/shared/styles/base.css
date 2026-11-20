@@ -107,11 +107,15 @@ button, input, select { font: inherit; color: inherit; }
   min-height: 56px;
   padding: 0 22px;
   border-radius: var(--radius);
+  border: 0;
+  background: transparent;
   font-size: 18px;
   color: var(--ink-2);
   text-decoration: none;
-  cursor: default;
+  cursor: pointer;
 }
+.nav-item:disabled { cursor: wait; }
+.nav-item:enabled:hover { background: var(--brand-soft); color: var(--brand); }
 .nav-item.is-active { background: var(--brand-soft); color: var(--brand); }
 .nav-item:not(.is-active) { opacity: 0.85; }
 

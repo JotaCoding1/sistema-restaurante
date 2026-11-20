@@ -59,9 +59,13 @@ Abra `http://localhost:3000` no navegador. Para desenvolver com recarga automát
 
 | Papel | E-mail | Senha |
 | --- | --- | --- |
-| Garçom | `garcom@restaurante.local` | `123456` |
-| Cozinheiro | `cozinha@restaurante.local` | `123456` |
-| Caixa | `caixa@restaurante.local` | `123456` |
+| Garçom (Lucas Ferreira) | `garcom@restaurante.local` | `123456` |
+| Cozinha (Ana Ribeiro) | `cozinha@restaurante.local` | `123456` |
+| Caixa (Beatriz Lima) | `caixa@restaurante.local` | `123456` |
+
+O seed também cria 12 mesas, 8 itens no cardápio e um cenário de demonstração:
+a Mesa 02 tem dois pedidos entregues (subtotal de cada pedido x total da conta)
+e as mesas 04, 05, 08 e 09 têm pedidos em etapas diferentes da cozinha.
 
 Para voltar aos dados iniciais, rode `npm run seed` de novo (ele apaga e recria a pasta `data/`).
 
@@ -78,7 +82,7 @@ Todas as rotas abaixo, exceto `/api/login`, exigem o header `X-User-Email`.
 | --- | --- | --- | --- |
 | `GET` | `/api/menu` | autenticado | Lista os itens do cardápio |
 | `GET` | `/api/menu/:id` | autenticado | Consulta um item |
-| `POST` | `/api/menu` | `CASHIER` | Cria um item |
+| `POST` | `/api/menu` | `COOK`, `CASHIER` | Cria um item |
 
 O corpo da criação de um item deve conter `name` e `price`:
 
@@ -116,6 +120,92 @@ Os pedidos seguem os status `PENDING`, `PREPARING`, `READY`, `DELIVERED` e
 `CANCELLED`. A cozinha altera os status de preparo pelas rotas do módulo
 `kitchen`; o garçom pode entregar somente pedidos com status `READY`.
 
+## Front-end: Monolito Modular
+
+O front-end segue o mesmo estilo do back-end: uma única aplicação (HTML, CSS e
+JavaScript puro com módulos ES nativos, sem build), dividida em **módulos por
+domínio** com fronteiras explícitas.
+
+O front-end fica em **duas pastas**, servidas pelo Express no mesmo endereço
+(`src/app.js`). Por isso os caminhos no navegador continuam `/app/...`, e um
+arquivo de `telas` importa um de `base` normalmente.
+
+```text
+public/
+  base/                  # parte 1 — fundação (funciona sozinha: login)
+    index.html
+    img/
+    app/
+      shared/            # infraestrutura sem regra de negócio
+        http.js  events.js  dom.js  format.js  icons.js  layout.js
+        styles/base.css
+      modules/
+        identity/  tables/  menu/      # módulos sem dependências
+      pages/login.page.js
+  telas/                 # parte 2 — domínios dependentes e telas dos perfis
+    garcom.html  cozinha.html  caixa.html
+    app/
+      modules/
+        reservations/  orders/  kitchen/  payments/
+      pages/             # salao, cozinha e caixa (+ CSS de layout)
+```
+
+Cada módulo segue o mesmo formato: `index.js` (interface pública),
+`<módulo>.api.js` (único arquivo que chama `/api/<módulo>`), `.model.js`,
+`.view.js` e `.css`.
+
+| Módulo | Pasta | Responsabilidade | Depende de |
+| --- | --- | --- | --- |
+| `identity` | `base` | Sessão, login, papéis, topo do usuário | nenhum |
+| `tables` | `base` | Mesas, status Livre/Ocupada, cartões de mesa | nenhum |
+| `menu` | `base` | Cardápio, preços, cadastro de itens | nenhum |
+| `reservations` | `telas` | Reservas do dia (dados de demonstração) | `tables` |
+| `orders` | `telas` | Pedidos, subtotais, novo pedido, entrega | `menu` |
+| `kitchen` | `telas` | Fila Pendente → Em preparo → Enviado | `orders`, `tables` |
+| `payments` | `telas` | Conta da mesa, forma de pagamento, fechamento | `orders`, `tables` |
+
+| Página | Perfil | Compõe |
+| --- | --- | --- |
+| `login.page.js` | todos | `identity` |
+| `salao.page.js` | Garçom | `identity`, `tables`, `reservations`, `orders` |
+| `cozinha.page.js` | Cozinha | `identity`, `kitchen`, `menu` |
+| `caixa.page.js` | Caixa | `identity`, `payments` |
+
+Regras da arquitetura do front-end:
+
+1. Um módulo só importa outro pelo `index.js` dele; páginas também.
+2. Só o `*.api.js` de cada módulo chama a API, e apenas as rotas do próprio domínio.
+3. `shared` não importa módulos nem páginas (a autenticação é injetada por `identity` via `configureHttp`).
+4. Não há dependências circulares; páginas não são importadas por ninguém.
+5. Módulos avisam o que aconteceu por eventos (`orders:created`, `payments:paid`…); a página decide o que recarregar.
+6. Cada módulo é dono do próprio CSS; a página carrega o CSS dos módulos que usa.
+7. `base` nunca depende de `telas`: a parte 1 funciona sozinha.
+
+As regras são verificadas automaticamente:
+
+```bash
+npm run check:front
+```
+
+### Commit em duas partes
+
+```bash
+# Parte 1 — fundação: shared, identity, tables, menu, login
+git rm public/index.html public/css/style.css public/js/api.js
+git add public/base src/app.js src/seed.js src/modules/menu/menu.routes.js \
+        scripts/check-front-architecture.js package.json package-lock.json
+git commit -m "Front-end parte 1: base do monolito modular (shared, identity, tables, menu e login)"
+
+# Parte 2 — domínios dependentes e telas de garçom, cozinha e caixa
+git rm public/garcom.html public/cozinha.html public/caixa.html
+git add public/telas README.md
+git commit -m "Front-end parte 2: reservations, orders, kitchen, payments e telas dos perfis"
+```
+
+O caixa só fecha a mesa quando todos os pedidos estão entregues: o garçom
+confirma a entrega dos pedidos marcados como *Enviado* pela cozinha. As telas se
+atualizam a cada 5 s, então o que um perfil faz aparece nos outros.
+
 ## Scripts
 
 | Comando | O que faz |
@@ -123,6 +213,7 @@ Os pedidos seguem os status `PENDING`, `PREPARING`, `READY`, `DELIVERED` e
 | `npm start` | Inicia o servidor |
 | `npm run dev` | Inicia com recarga automática |
 | `npm run seed` | Recria os dados de exemplo |
+| `npm run check:front` | Verifica as regras de arquitetura do front-end |
 
 ## Estrutura do repositório
 
@@ -131,7 +222,7 @@ restaurante/
   package.json
   data/                  # arquivos JSON, um por módulo (gerado pelo seed)
   docs/                  # requisitos e diagramas
-  public/                # front-end: páginas HTML, css, js
+  public/                # front-end: base/ (parte 1) e telas/ (parte 2)
   src/
     server.js  app.js  seed.js
     shared/              # jsonStore, roles, errors, allowRoles
@@ -155,3 +246,4 @@ Foi criada a branch "development" para ser utilizada como a branch principal de 
 | Login não funciona | Seed não foi executado | `npm run seed` |
 | API retorna 401 | O header `X-User-Email` não foi enviado ou não corresponde a um usuário | Enviar o e-mail de um usuário criado pelo seed |
 | Porta 3000 em uso | Outro processo na porta | Fechar o processo ou definir `PORT` |
+| Página em branco ao abrir o HTML com duplo clique | Módulos ES só rodam servidos por HTTP | Rodar `npm start` e abrir `http://localhost:3000` |

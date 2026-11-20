@@ -1,0 +1,73 @@
+/* pages/salao.css — composição da tela do Salão: resumo, grade + painel lateral */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  padding: 44px 0;
+  margin-bottom: 72px;
+}
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 0 32px;
+  border-left: 1px solid var(--line-strong);
+}
+.stat:first-child { padding-left: 0; border-left: 0; }
+.stat-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.stat-icon .icon { width: 32px; height: 32px; }
+.stat-value { font-size: 52px; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+.stat-label { margin-top: 10px; font-size: 20px; color: var(--ink-2); }
+
+.waiter-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 490px;
+  align-items: start;
+}
+.waiter-layout > section { padding-right: 48px; }
+
+.side {
+  position: sticky;
+  top: 140px;
+  padding-left: 40px;
+  border-left: 1px solid var(--line-strong);
+  min-height: 60vh;
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+.back { justify-self: start; margin-left: -20px; min-height: 44px; font-size: 16px; gap: 8px; }
+.detail-sub { display: flex; justify-content: space-between; align-items: center; }
+.free-text { font-size: 18px; color: var(--ink-2); }
+
+@media (max-width: 1380px) {
+  .waiter-layout { grid-template-columns: minmax(0, 1fr) 400px; }
+  .waiter-layout > section { padding-right: 32px; }
+  .side { padding-left: 32px; }
+  .stat { gap: 18px; padding: 0 20px; }
+  .stat-icon { width: 64px; height: 64px; }
+  .stat-value { font-size: 42px; }
+  .stat-label { font-size: 17px; }
+}
+
+@media (max-width: 1180px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; padding: 28px 0; margin-bottom: 48px; }
+  .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+  .waiter-layout { grid-template-columns: 1fr; }
+  .waiter-layout > section { padding-right: 0; }
+  .side { position: static; padding: 40px 0 0; margin-top: 40px; border-left: 0; border-top: 1px solid var(--line-strong); min-height: 0; }
+}
+
+@media (max-width: 700px) {
+  .stat-icon { display: none; }
+}

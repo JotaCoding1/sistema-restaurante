@@ -1,0 +1,23 @@
+/* pages/caixa.css — composição da tela do Caixa: lista à esquerda, conta à direita */
+
+.cashier-layout {
+  display: grid;
+  grid-template-columns: 630px minmax(0, 1fr);
+  align-items: start;
+}
+.bills { padding-right: 72px; border-right: 1px solid var(--line-strong); min-height: 70vh; }
+.bills .section-head { margin-bottom: 48px; }
+.bill { padding-left: 72px; display: grid; gap: 28px; }
+
+@media (max-width: 1380px) {
+  .cashier-layout { grid-template-columns: 440px minmax(0, 1fr); }
+  .bills { padding-right: 40px; }
+  .bill { padding-left: 40px; }
+}
+
+@media (max-width: 1180px) {
+  .cashier-layout { grid-template-columns: 1fr; }
+  .bills { padding-right: 0; border-right: 0; min-height: 0; }
+  .bills .section-head { margin-bottom: 24px; }
+  .bill { padding: 40px 0 0; margin-top: 40px; border-top: 1px solid var(--line-strong); }
+}
